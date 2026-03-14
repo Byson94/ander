@@ -21,6 +21,8 @@ fn download_libgdx_deps(version: &str, cache_dir: &Path) -> anyhow::Result<()> {
     let jars = [
         format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-backend-lwjgl3/{v}/gdx-backend-lwjgl3-{v}.jar", v = version),
         format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-platform/{v}/gdx-platform-{v}-natives-desktop.jar", v = version),
+        format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-freetype/{v}/gdx-freetype-{v}.jar", v = version),
+        format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-freetype-platform/{v}/gdx-freetype-platform-{v}-natives-desktop.jar", v = version),
         // LWJGL version depends on LibGDX version
         // 1.9.x uses LWJGL 3.2.3, 1.10+ uses 3.3.x
         lwjgl_url("lwjgl", version),
