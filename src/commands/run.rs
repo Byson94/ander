@@ -1,5 +1,5 @@
 use std::path::{PathBuf, Path};
-use crate::apk::Framework;
+use crate::apk::{Framework, GdxBackend};
 use zip::ZipArchive;
 use std::io::Read;
 
@@ -13,9 +13,9 @@ pub fn execute(apk: &PathBuf) -> anyhow::Result<()> {
     let framework = crate::apk::Framework::detect(&apk)?;
 
     match framework {
-        Framework::LibGdx => {
+        Framework::LibGdx(backend) => {
             log::debug!("Executing APK with LibGdx framework.");
-            libgdx_run(&apk)?
+            libgdx_run(&apk, &backend)?
         }
         Framework::Unknown => {
             anyhow::bail!("Cannot work on unknown APK framework.")
@@ -25,7 +25,7 @@ pub fn execute(apk: &PathBuf) -> anyhow::Result<()> {
     Ok(())
 }
 
-pub fn libgdx_run(apk: &Path) -> anyhow::Result<()> {
+pub fn libgdx_run(apk: &Path, backend: &GdxBackend) -> anyhow::Result<()> {
     // Extract to temprorary file
     let tmp = tempfile::tempdir()?;
     crate::apk::extract(apk, tmp.path())?;
@@ -40,16 +40,20 @@ pub fn libgdx_run(apk: &Path) -> anyhow::Result<()> {
     // Extracting LibGDX version for installation of dependencies
     let libgdx_version = extract_libgdx_version(&app_jar)?;
     log::info!("Detected LibGDX version: {}", libgdx_version);
+    log::debug!("Gdx backend found: {}", match backend {
+        GdxBackend::Lwjgl3 => "LWJGL3",
+        GdxBackend::Lwjgl2 => "LWJGL2",
+    });
 
     // Ensure LWJGL/LibGDX desktop jars are cached
-    let lib_dir = crate::deps::ensure_libgdx_deps(&libgdx_version)?;
+    let lib_dir = crate::deps::ensure_libgdx_deps(&libgdx_version, &backend)?;
     
     // Find main app class
     let main_class = crate::apk::class::find_main_class(&app_jar)?;
     log::info!("Detected main class: {}", main_class);
     
     // Generate source
-    crate::launcher::write_launcher(&tmp.path())?;
+    crate::launcher::write_launcher(&tmp.path(), &backend)?;
     
     // Run from assets directory
     let assets_dir = tmp.path().join("assets");

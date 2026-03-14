@@ -1,1 +1,5 @@
 /target
+libs-lwjgl2/
+libs-lwjgl3/
+gdx-lwjgl2.zip
+gdx-lwjgl3.zip

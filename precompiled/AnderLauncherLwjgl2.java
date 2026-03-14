@@ -1,25 +1,22 @@
-// Pre-compiled and embedded into the ander binary via include_bytes!
-// To recompile: javac -cp gdx-backend-lwjgl3.jar:gdx.jar AnderLauncher.java
-// Then commit the updated AnderLauncher.class
-
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.ApplicationListener;
 import java.lang.reflect.Constructor;
 
-public class AnderLauncher {
+public class AnderLauncherLwjgl2 {
     public static void main(String[] args) throws Exception {
         String mainClass = args[0];
         int width = Integer.parseInt(args[1]);
         int height = Integer.parseInt(args[2]);
         String title = args[3];
 
-        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle(title);
-        config.setWindowedMode(width, height);
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = title;
+        config.width = width;
+        config.height = height;
 
         ApplicationListener instance = instantiate(mainClass);
-        new Lwjgl3Application(instance, config);
+        new LwjglApplication(instance, config);
     }
 
     private static ApplicationListener instantiate(String mainClass) throws Exception {

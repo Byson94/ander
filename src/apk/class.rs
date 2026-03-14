@@ -48,6 +48,15 @@ fn scan_launcher_class(
     zip: &mut ZipArchive<std::fs::File>,
     suffix: &str,
 ) -> anyhow::Result<String> {
+    // Collect all class files in the JAR
+    let all_classes: std::collections::HashSet<String> = (0..zip.len())
+        .filter_map(|i| {
+            let entry = zip.by_index(i).ok()?;
+            let name = entry.name().to_string();
+            name.ends_with(".class").then(|| name.trim_end_matches(".class").to_string())
+        })
+        .collect();
+
     let entry_name = (0..zip.len())
         .find_map(|i| {
             let entry = zip.by_index(i).ok()?;
@@ -56,32 +65,44 @@ fn scan_launcher_class(
         })
         .ok_or_else(|| anyhow::anyhow!("No {suffix} found"))?;
 
-    let package = entry_name
-        .strip_suffix(suffix)
-        .unwrap_or("")
-        .trim_end_matches('/');
+    let bytes = {
+        let mut entry = zip.by_name(&entry_name)?;
+        let mut bytes = Vec::new();
+        entry.read_to_end(&mut bytes)?;
+        bytes
+    };
 
-    let mut entry = zip.by_name(&entry_name)?;
-    let mut bytes = Vec::new();
-    entry.read_to_end(&mut bytes)?;
-
-    extract_class_name_from_bytecode(&bytes, package)
-}
-
-fn extract_class_name_from_bytecode(bytes: &[u8], package: &str) -> anyhow::Result<String> {
-    let strings = parse_constant_pool_strings(bytes)?;
+    let strings = parse_constant_pool_strings(&bytes)?;
 
     for s in &strings {
-        if s.starts_with(package)
+        if s.contains('$') || s.contains('(') || s.contains(';') || !s.contains('/') {
+            continue;
+        }
+        if all_classes.contains(s.as_str())
+            && !s.starts_with("com/badlogic/gdx")
+            && !s.starts_with("android")
+            && !s.starts_with("java")
             && !s.ends_with("AndroidLauncher")
             && !s.ends_with("DesktopLauncher")
             && !s.ends_with("Lwjgl3Launcher")
-            && !s.contains('$')
-            && s.contains('/')
         {
-            return Ok(s.replace('/', "."));
+            // Verify this class actually looks like a libGDX game class
+            if let Ok(mut candidate_entry) = zip.by_name(&format!("{}.class", s)) {
+                let mut candidate_bytes = Vec::new();
+                candidate_entry.read_to_end(&mut candidate_bytes).ok();
+                if let Ok(candidate_strings) = parse_constant_pool_strings(&candidate_bytes) {
+                    let is_gdx_class = candidate_strings.iter().any(|cs| {
+                        cs == "com/badlogic/gdx/ApplicationListener"
+                            || cs == "com/badlogic/gdx/Game"
+                    });
+                    if is_gdx_class {
+                        return Ok(s.replace('/', "."));
+                    }
+                }
+            }
         }
     }
+
     anyhow::bail!("No candidate class found in constant pool")
 }
 
