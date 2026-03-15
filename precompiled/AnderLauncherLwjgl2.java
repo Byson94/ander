@@ -5,6 +5,11 @@ import java.lang.reflect.Constructor;
 
 public class AnderLauncherLwjgl2 {
     public static void main(String[] args) throws Exception {
+        if (args.length > 0 && args[0].equals("--dry-run")) {
+            Class.forName("com.badlogic.gdx.backends.lwjgl.LwjglApplication");
+            System.exit(0);
+        }
+
         String mainClass = args[0];
         int width = Integer.parseInt(args[1]);
         int height = Integer.parseInt(args[2]);

@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::path::Path;
 use std::io::Read;
 use zip::ZipArchive;
@@ -6,12 +7,10 @@ pub fn find_main_class(jar: &Path) -> anyhow::Result<String> {
     let file = std::fs::File::open(jar)?;
     let mut zip = ZipArchive::new(file)?;
 
-    // Try MANIFEST.MF first
     if let Ok(manifest_class) = read_manifest_main_class(&mut zip) {
         return Ok(manifest_class);
     }
 
-    // If not found in MANIFEST.MF, try known classes
     let launcher_suffixes = [
         "AndroidLauncher.class",
         "DesktopLauncher.class",
@@ -44,11 +43,102 @@ fn read_manifest_main_class(zip: &mut ZipArchive<std::fs::File>) -> anyhow::Resu
     anyhow::bail!("No Main-Class in manifest")
 }
 
+struct ClassInfo {
+    superclass: Option<String>,
+}
+
+fn parse_class_info(bytes: &[u8]) -> anyhow::Result<ClassInfo> {
+    if bytes.len() < 10 || &bytes[0..4] != b"\xCA\xFE\xBA\xBE" {
+        anyhow::bail!("Not a valid class file");
+    }
+
+    let pool_count = u16::from_be_bytes([bytes[8], bytes[9]]) as usize;
+    let mut pos = 10;
+    let mut utf8_map: HashMap<usize, String> = HashMap::new();
+    let mut class_map: HashMap<usize, usize> = HashMap::new();
+    let mut i = 1usize;
+
+    while i < pool_count {
+        if pos >= bytes.len() { break; }
+        let tag = bytes[pos]; pos += 1;
+        match tag {
+            1 => {
+                if pos + 2 > bytes.len() { break; }
+                let len = u16::from_be_bytes([bytes[pos], bytes[pos+1]]) as usize; pos += 2;
+                if pos + len > bytes.len() { break; }
+                if let Ok(s) = std::str::from_utf8(&bytes[pos..pos+len]) {
+                    utf8_map.insert(i, s.to_string());
+                }
+                pos += len;
+            }
+            7 => {
+                if pos + 2 > bytes.len() { break; }
+                let name_idx = u16::from_be_bytes([bytes[pos], bytes[pos+1]]) as usize; pos += 2;
+                class_map.insert(i, name_idx);
+            }
+            8 | 16 | 19 | 20 => pos += 2,
+            9 | 10 | 11 | 3 | 4 | 12 | 17 | 18 => pos += 4,
+            5 | 6 => { pos += 8; i += 1; }
+            15 => pos += 3,
+            _ => anyhow::bail!("Unknown constant pool tag {tag} at pos {pos}"),
+        }
+        i += 1;
+    }
+
+    // After constant pool: access_flags (2), this_class (2), super_class (2)
+    if pos + 6 > bytes.len() {
+        return Ok(ClassInfo { superclass: None });
+    }
+    // skip access_flags
+    pos += 2;
+    // skip this_class
+    pos += 2;
+    // read super_class index
+    let super_class_idx = u16::from_be_bytes([bytes[pos], bytes[pos+1]]) as usize;
+
+    let superclass = class_map.get(&super_class_idx)
+        .and_then(|utf8_idx| utf8_map.get(utf8_idx))
+        .cloned();
+
+    Ok(ClassInfo { superclass })
+}
+
+fn is_gdx_game_class(class_name: &str, zip: &mut ZipArchive<std::fs::File>) -> bool {
+    let mut current = class_name.to_string();
+    for _ in 0..10 {
+        if current == "com/badlogic/gdx/Game"
+            || current == "com/badlogic/gdx/ApplicationListener" {
+            return true;
+        }
+        // Stop at java/android/kotlin roots
+        if current.starts_with("java/")
+            || current.starts_with("android/")
+            || current.starts_with("kotlin/") {
+            return false;
+        }
+
+        let bytes = {
+            let Ok(mut entry) = zip.by_name(&format!("{}.class", current)) else { return false; };
+            let mut bytes = Vec::new();
+            entry.read_to_end(&mut bytes).ok();
+            bytes
+        };
+
+        match parse_class_info(&bytes) {
+            Ok(info) => match info.superclass {
+                Some(s) => current = s,
+                None => return false,
+            },
+            Err(_) => return false,
+        }
+    }
+    false
+}
+
 fn scan_launcher_class(
     zip: &mut ZipArchive<std::fs::File>,
     suffix: &str,
 ) -> anyhow::Result<String> {
-    // Collect all class files in the JAR
     let all_classes: std::collections::HashSet<String> = (0..zip.len())
         .filter_map(|i| {
             let entry = zip.by_index(i).ok()?;
@@ -86,19 +176,10 @@ fn scan_launcher_class(
             && !s.ends_with("DesktopLauncher")
             && !s.ends_with("Lwjgl3Launcher")
         {
-            // Verify this class actually looks like a libGDX game class
-            if let Ok(mut candidate_entry) = zip.by_name(&format!("{}.class", s)) {
-                let mut candidate_bytes = Vec::new();
-                candidate_entry.read_to_end(&mut candidate_bytes).ok();
-                if let Ok(candidate_strings) = parse_constant_pool_strings(&candidate_bytes) {
-                    let is_gdx_class = candidate_strings.iter().any(|cs| {
-                        cs == "com/badlogic/gdx/ApplicationListener"
-                            || cs == "com/badlogic/gdx/Game"
-                    });
-                    if is_gdx_class {
-                        return Ok(s.replace('/', "."));
-                    }
-                }
+            let is_gdx = is_gdx_game_class(s, zip);
+            log::debug!("candidate: {} is_gdx={}", s, is_gdx);
+            if is_gdx {
+                return Ok(s.replace('/', "."));
             }
         }
     }
@@ -106,8 +187,6 @@ fn scan_launcher_class(
     anyhow::bail!("No candidate class found in constant pool")
 }
 
-// Minimal constant pool parser.
-// See: https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-4.html
 fn parse_constant_pool_strings(bytes: &[u8]) -> anyhow::Result<Vec<String>> {
     if bytes.len() < 10 || &bytes[0..4] != b"\xCA\xFE\xBA\xBE" {
         anyhow::bail!("Not a valid class file");
@@ -116,30 +195,25 @@ fn parse_constant_pool_strings(bytes: &[u8]) -> anyhow::Result<Vec<String>> {
     let pool_count = u16::from_be_bytes([bytes[8], bytes[9]]) as usize;
     let mut pos = 10;
     let mut strings = Vec::new();
-
     let mut i = 1;
+
     while i < pool_count {
-        if pos >= bytes.len() {
-            break;
-        }
-        let tag = bytes[pos];
-        pos += 1;
+        if pos >= bytes.len() { break; }
+        let tag = bytes[pos]; pos += 1;
         match tag {
             1 => {
-                // Utf8
                 if pos + 2 > bytes.len() { break; }
-                let len = u16::from_be_bytes([bytes[pos], bytes[pos + 1]]) as usize;
-                pos += 2;
+                let len = u16::from_be_bytes([bytes[pos], bytes[pos+1]]) as usize; pos += 2;
                 if pos + len > bytes.len() { break; }
-                if let Ok(s) = std::str::from_utf8(&bytes[pos..pos + len]) {
+                if let Ok(s) = std::str::from_utf8(&bytes[pos..pos+len]) {
                     strings.push(s.to_string());
                 }
                 pos += len;
             }
-            7 | 8 | 16 | 19 | 20 => pos += 2, // Class, String, MethodType, Module, Package
-            9 | 10 | 11 | 3 | 4 | 12 | 17 | 18 => pos += 4, // Fieldref, Methodref, etc.
-            5 | 6 => { pos += 8; i += 1; } // Long, Double take two slots
-            15 => pos += 3, // MethodHandle
+            7 | 8 | 16 | 19 | 20 => pos += 2,
+            9 | 10 | 11 | 3 | 4 | 12 | 17 | 18 => pos += 4,
+            5 | 6 => { pos += 8; i += 1; }
+            15 => pos += 3,
             _ => anyhow::bail!("Unknown constant pool tag {tag} at pos {pos}"),
         }
         i += 1;

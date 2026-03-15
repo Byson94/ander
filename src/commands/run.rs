@@ -1,5 +1,5 @@
 use std::path::{PathBuf, Path};
-use crate::apk::{Framework, GdxBackend};
+use crate::apk::Framework;
 use zip::ZipArchive;
 use std::io::Read;
 
@@ -13,9 +13,9 @@ pub fn execute(apk: &PathBuf) -> anyhow::Result<()> {
     let framework = crate::apk::Framework::detect(&apk)?;
 
     match framework {
-        Framework::LibGdx(backend) => {
+        Framework::LibGdx => {
             log::debug!("Executing APK with LibGdx framework.");
-            libgdx_run(&apk, &backend)?
+            libgdx_run(&apk)?
         }
         Framework::Unknown => {
             anyhow::bail!("Cannot work on unknown APK framework.")
@@ -25,7 +25,7 @@ pub fn execute(apk: &PathBuf) -> anyhow::Result<()> {
     Ok(())
 }
 
-pub fn libgdx_run(apk: &Path, backend: &GdxBackend) -> anyhow::Result<()> {
+pub fn libgdx_run(apk: &Path) -> anyhow::Result<()> {
     // Extract to temprorary file
     let tmp = tempfile::tempdir()?;
     crate::apk::extract(apk, tmp.path())?;
@@ -33,27 +33,22 @@ pub fn libgdx_run(apk: &Path, backend: &GdxBackend) -> anyhow::Result<()> {
     log::debug!("Extraction complete. Extracted to: {}", tmp.path().display());
 
     // Convert dex to jar
-    let classes_dex = tmp.path().join("classes.dex");
     let app_jar = tmp.path().join("application.jar");
-    crate::apk::dex::dex_to_jar(&classes_dex, &app_jar)?;
+    crate::apk::dex::dex_to_jar(&tmp.path(), &app_jar)?;
 
     // Extracting LibGDX version for installation of dependencies
     let libgdx_version = extract_libgdx_version(&app_jar)?;
     log::info!("Detected LibGDX version: {}", libgdx_version);
-    log::debug!("Gdx backend found: {}", match backend {
-        GdxBackend::Lwjgl3 => "LWJGL3",
-        GdxBackend::Lwjgl2 => "LWJGL2",
-    });
 
     // Ensure LWJGL/LibGDX desktop jars are cached
-    let lib_dir = crate::deps::ensure_libgdx_deps(&libgdx_version, &backend)?;
+    let lib_dir = crate::deps::ensure_libgdx_deps(&libgdx_version)?;
     
     // Find main app class
     let main_class = crate::apk::class::find_main_class(&app_jar)?;
     log::info!("Detected main class: {}", main_class);
     
     // Generate source
-    crate::launcher::write_launcher(&tmp.path(), &backend)?;
+    crate::launcher::write_launcher(&tmp.path())?;
     
     // Run from assets directory
     let assets_dir = tmp.path().join("assets");
@@ -64,6 +59,7 @@ pub fn libgdx_run(apk: &Path, backend: &GdxBackend) -> anyhow::Result<()> {
     };
 
     crate::jvm::run(&working_dir, &lib_dir, &app_jar, tmp.path(), &main_class, "App")?;
+    
     
     Ok(())
 }
