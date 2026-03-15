@@ -17,7 +17,10 @@ wget -nc -P libs-lwjgl2 "${BASE}/gdx/${LWJGL2_GDX_VERSION}/gdx-${LWJGL2_GDX_VERS
 wget -nc -P libs-lwjgl2 "${BASE}/gdx-backend-lwjgl/${LWJGL2_GDX_VERSION}/gdx-backend-lwjgl-${LWJGL2_GDX_VERSION}.jar"
 
 # Compile
-javac -cp "libs-lwjgl3/gdx-${GDX_VERSION}.jar:libs-lwjgl3/gdx-backend-lwjgl3-${GDX_VERSION}.jar" AnderLauncherLwjgl3.java
-javac -cp "libs-lwjgl2/gdx-${LWJGL2_GDX_VERSION}.jar:libs-lwjgl2/gdx-backend-lwjgl-${LWJGL2_GDX_VERSION}.jar" AnderLauncherLwjgl2.java
+javac -cp "libs-lwjgl3/gdx-${GDX_VERSION}.jar:libs-lwjgl3/gdx-backend-lwjgl3-${GDX_VERSION}.jar" \
+    -d out src/AnderLauncherLwjgl3.java
 
-echo "Done. Commit AnderLauncherLwjgl2.class and AnderLauncherLwjgl3.class"
+javac -cp "libs-lwjgl2/gdx-${GDX_VERSION}.jar:libs-lwjgl2/gdx-backend-lwjgl-${GDX_VERSION}.jar" \
+    -d out src/AnderLauncherLwjgl2.java
+
+echo "Done. Commit out/ directory."
