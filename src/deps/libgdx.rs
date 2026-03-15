@@ -8,16 +8,10 @@ pub struct LibGdxDeps {
 pub fn ensure_libgdx_deps(version: &str) -> anyhow::Result<LibGdxDeps> {
     let lwjgl3_dir = get_cache_dir(&format!("{}/lwjgl3", version))?;
     let lwjgl2_dir = get_cache_dir(&format!("{}/lwjgl2", version))?;
-
-    if !lwjgl3_dir.exists() {
-        std::fs::create_dir_all(&lwjgl3_dir)?;
-        download_libgdx_deps(version, &lwjgl3_dir, true)?;
-    }
-    if !lwjgl2_dir.exists() {
-        std::fs::create_dir_all(&lwjgl2_dir)?;
-        download_libgdx_deps(version, &lwjgl2_dir, false)?;
-    }
-
+    std::fs::create_dir_all(&lwjgl3_dir)?;
+    std::fs::create_dir_all(&lwjgl2_dir)?;
+    download_libgdx_deps(version, &lwjgl3_dir, true)?;
+    download_libgdx_deps(version, &lwjgl2_dir, false)?;
     Ok(LibGdxDeps { lwjgl3_dir, lwjgl2_dir })
 }
 
@@ -28,11 +22,22 @@ fn get_cache_dir(path: &str) -> anyhow::Result<PathBuf> {
 }
 
 fn download_libgdx_deps(version: &str, cache_dir: &Path, lwjgl3: bool) -> anyhow::Result<()> {
+    // Dependencies that both will share.
     let mut jars = vec![
+        // Core libgdx stuff
         format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-platform/{v}/gdx-platform-{v}-natives-desktop.jar", v = version),
         format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-freetype/{v}/gdx-freetype-{v}.jar", v = version),
         format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-freetype-platform/{v}/gdx-freetype-platform-{v}-natives-desktop.jar", v = version),
+        // JLayer: MP3 audio decoding (gdx fork)
         "https://repo1.maven.org/maven2/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.jar".to_string(),
+        // xerial sqlite-jdbc: SQLite driver (replaces Android's built-in SQLite)
+        "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar".to_string(),
+        // slf4j-api: logging facade (required by sqlite-jdbc)
+        "https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar".to_string(),
+        // slf4j-simple: minimal slf4j binding, prints to stdout
+        "https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36.jar".to_string(),
+        // org.json: JSON parsing
+        "https://repo1.maven.org/maven2/org/json/json/20240303/json-20240303.jar".to_string(),
     ];
 
     if lwjgl3 {

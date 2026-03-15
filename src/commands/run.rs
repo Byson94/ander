@@ -40,6 +40,10 @@ pub fn libgdx_run(apk: &Path) -> anyhow::Result<()> {
     let libgdx_version = extract_libgdx_version(&app_jar)?;
     log::info!("Detected LibGDX version: {}", libgdx_version);
 
+    // Extracting application name
+    let app_name = get_package_name(tmp.path())?;
+    log::info!("Extracted package name: {}", app_name);
+
     // Ensure LWJGL/LibGDX desktop jars are cached
     let lib_dir = crate::deps::ensure_libgdx_deps(&libgdx_version)?;
     
@@ -58,8 +62,7 @@ pub fn libgdx_run(apk: &Path) -> anyhow::Result<()> {
         tmp.path().to_path_buf()
     };
 
-    crate::jvm::run(&working_dir, &lib_dir, &app_jar, tmp.path(), &main_class, "App")?;
-    
+    crate::jvm::run(&working_dir, &lib_dir, &app_jar, tmp.path(), &main_class, &app_name)?;
     
     Ok(())
 }
@@ -81,4 +84,31 @@ pub fn extract_libgdx_version(jar: &Path) -> anyhow::Result<String> {
     }
     
     anyhow::bail!("Could not extract LibGDX version from jar")
+}
+
+pub fn get_package_name(extracted_dir: &Path) -> anyhow::Result<String> {
+    let bytes = std::fs::read(extracted_dir.join("AndroidManifest.xml"))?;
+    
+    let words: Vec<u16> = bytes.chunks_exact(2)
+        .map(|c| u16::from_le_bytes([c[0], c[1]]))
+        .collect();
+    
+    let mut i = 0;
+    while i < words.len() {
+        let len = words[i] as usize;
+        if len > 2 && len < 100 && i + len < words.len() {
+            let s: String = char::decode_utf16(words[i+1..i+1+len].iter().copied())
+                .filter_map(|r| r.ok())
+                .collect();
+            let parts: Vec<&str> = s.split('.').collect();
+            if parts.len() >= 2
+                && parts.iter().all(|p| !p.is_empty()
+                    && p.chars().all(|c| c.is_ascii_alphanumeric() || c == '_'))
+            {
+                return Ok(s);
+            }
+        }
+        i += 1;
+    }
+    anyhow::bail!("Could not extract package name from AndroidManifest.xml")
 }

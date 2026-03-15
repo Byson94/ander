@@ -52,7 +52,7 @@ public class AnderLauncherLwjgl3 {
             return (ApplicationListener) best.newInstance(params);
         }
 
-        throw new RuntimeException("Could not instantiate " + mainClass + " — no usable constructor found");
+        throw new RuntimeException("Could not instantiate " + mainClass + ": no usable constructor found");
     }
 
     private static Object[] defaultParams(Class<?>[] types) {

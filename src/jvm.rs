@@ -33,6 +33,7 @@ pub fn run(
     log::info!("Launching DesktopLauncher...");
     let status = Command::new(&java)
         .arg("--enable-native-access=ALL-UNNAMED")
+        .arg(format!("-Dander.app.name={}", app_name))
         .arg("-cp")
         .arg(&classpath_str)
         .arg(launcher_class)
@@ -72,6 +73,7 @@ fn build_classpath(launcher_dir: &Path, app_jar: &Path, lib_dir: &Path) -> Strin
     let mut classpath = vec![
         launcher_dir.to_string_lossy().to_string(),
         app_jar.to_string_lossy().to_string(),
+        launcher_dir.join("android-stubs.jar").to_string_lossy().to_string(),
     ];
     if let Ok(entries) = std::fs::read_dir(lib_dir) {
         for entry in entries.flatten() {
