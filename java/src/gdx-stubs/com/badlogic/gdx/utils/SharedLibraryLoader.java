@@ -21,45 +21,48 @@ public class SharedLibraryLoader {
         System.out.println("[ander] SharedLibraryLoader.load(): " + libraryName);
         if (registered) return;
         registered = true;
+
         try {
             Class<?> bridge = Class.forName("AnderBridge");
-            java.lang.reflect.Method reg = bridge.getMethod(
-                "registerNativesForClass", String.class);
+            java.lang.reflect.Method listSymbols = bridge.getMethod("listNativeSymbols");
+            java.lang.reflect.Method regClass = bridge.getMethod("registerNativesForClass", String.class);
 
-            String appJar = System.getProperty("ander.app.jar", "");
-            if (appJar.isEmpty()) {
-                System.err.println("[ander] ander.app.jar not set!");
+            String[] symbols = (String[]) listSymbols.invoke(null);
+            if (symbols == null || symbols.length == 0) {
+                System.err.println("[ander] no Java_* symbols from launcher");
                 return;
             }
 
-            System.out.println("[ander] scanning app jar: " + appJar);
-            try (JarFile jar = new JarFile(appJar)) {
-                Enumeration<JarEntry> entries = jar.entries();
-                while (entries.hasMoreElements()) {
-                    JarEntry je = entries.nextElement();
-                    String name = je.getName();
-                    if (!name.endsWith(".class")) continue;
-                    String className = name.replace('/', '.').replace(".class", "");
-                    try {
-                        Class<?> cls = Class.forName(className);
-                        boolean hasNative = false;
-                        for (java.lang.reflect.Method m : cls.getDeclaredMethods()) {
-                            if (Modifier.isNative(m.getModifiers())) {
-                                hasNative = true;
-                                break;
-                            }
-                        }
-                        if (hasNative) {
-                            System.out.println("[ander] registering native class: " + className);
-                            reg.invoke(null, className);
-                        }
-                    } catch (Throwable t) {
-                        // Skip unloadable classes silently
-                    }
-                }
+            java.util.LinkedHashSet<String> classes = new java.util.LinkedHashSet<>();
+            for (String sym : symbols) {
+                String cls = symbolToClassName(sym);
+                if (cls != null) classes.add(cls);
             }
+
+            for (String className : classes) {
+                System.out.println("[ander] registering: " + className);
+                regClass.invoke(null, className);
+            }
+
         } catch (Exception e) {
             throw new GdxRuntimeException("Failed to register natives for: " + libraryName, e);
         }
+    }
+
+    private String symbolToClassName(String sym) {
+        if (!sym.startsWith("Java_")) return null;
+        String[] parts = sym.substring(5).split("_");
+        StringBuilder cls = new StringBuilder();
+        for (String part : parts) {
+            if (part.isEmpty()) continue;
+            if (Character.isUpperCase(part.charAt(0))) {
+                if (cls.length() > 0) cls.append('.');
+                cls.append(part);
+                break;
+            }
+            if (cls.length() > 0) cls.append('.');
+            cls.append(part);
+        }
+        return cls.length() > 0 ? cls.toString() : null;
     }
 }

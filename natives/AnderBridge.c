@@ -413,3 +413,41 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     fprintf(stderr, "[AnderBridge] JNI_OnLoad\n");
     return JNI_VERSION_1_6;
 }
+
+JNIEXPORT jobjectArray JNICALL Java_AnderBridge_listNativeSymbols(JNIEnv *env, jclass cls) {
+    if (g_sock < 0) {
+        fprintf(stderr, "[AnderBridge] listNativeSymbols: not connected\n");
+        return NULL;
+    }
+
+    uint32_t id = ++g_call_id;
+    send_msg(0x07, id, NULL, 0); // MSG_LIST_SYMBOLS
+
+    MsgHeader hdr;
+    uint8_t *buf = malloc(BUF_SIZE);
+    if (recv_msg(&hdr, buf, BUF_SIZE) < 0 || hdr.type != MSG_RETURN) {
+        free(buf);
+        return NULL;
+    }
+
+    // Count symbols
+    int count = 0;
+    for (uint32_t i = 0; i < hdr.data_len - 1; i++)
+        if (buf[i] == '\0') count++;
+
+    jclass str_cls = (*env)->FindClass(env, "java/lang/String");
+    jobjectArray arr = (*env)->NewObjectArray(env, count, str_cls, NULL);
+
+    int idx = 0, start = 0;
+    for (uint32_t i = 0; i <= hdr.data_len; i++) {
+        if (buf[i] == '\0' && i > (uint32_t)start) {
+            jstring s = (*env)->NewStringUTF(env, (char *)buf + start);
+            (*env)->SetObjectArrayElement(env, arr, idx++, s);
+            (*env)->DeleteLocalRef(env, s);
+            start = i + 1;
+        }
+    }
+
+    free(buf);
+    return arr;
+}

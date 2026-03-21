@@ -8,7 +8,13 @@ public class AnderBridge {
 
     // Called from SharedLibraryLoader
     public static void registerNativesForClass(String className) throws Exception {
-        Class<?> cls = Class.forName(className);
+        Class<?> cls;
+        try {
+            cls = Class.forName(className);
+        } catch (Throwable t) {
+            System.err.println("[AnderBridge] skipping unloadable class: " + className + " — " + t.getMessage());
+            return;
+        }
         for (Method m : cls.getDeclaredMethods()) {
             if (!Modifier.isNative(m.getModifiers())) continue;
             String sig = buildSignature(m);
@@ -46,4 +52,5 @@ public class AnderBridge {
     public static native void registerNativeMethod(String className,
                                                     String methodName,
                                                     String signature);
+    public static native String[] listNativeSymbols();
 }

@@ -92,7 +92,6 @@ pub fn run(
         .arg("--enable-native-access=ALL-UNNAMED")
         .arg(format!("-Dander.app.name={}", app_name))
         .arg(format!("-Dander.bridge.path={}", ander_bridge_path))
-        .arg(format!("-Dander.app.jar={}", app_jar.display()))
         .arg("-cp")
         .arg(&classpath_str)
         .arg(launcher_class)
