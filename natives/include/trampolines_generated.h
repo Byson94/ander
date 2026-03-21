@@ -1,0 +1,1030 @@
+#define MAX_TRAMPOLINES_COUNT 512
+
+MAKE_TRAMPOLINE(0)
+MAKE_TRAMPOLINE(1)
+MAKE_TRAMPOLINE(2)
+MAKE_TRAMPOLINE(3)
+MAKE_TRAMPOLINE(4)
+MAKE_TRAMPOLINE(5)
+MAKE_TRAMPOLINE(6)
+MAKE_TRAMPOLINE(7)
+MAKE_TRAMPOLINE(8)
+MAKE_TRAMPOLINE(9)
+MAKE_TRAMPOLINE(10)
+MAKE_TRAMPOLINE(11)
+MAKE_TRAMPOLINE(12)
+MAKE_TRAMPOLINE(13)
+MAKE_TRAMPOLINE(14)
+MAKE_TRAMPOLINE(15)
+MAKE_TRAMPOLINE(16)
+MAKE_TRAMPOLINE(17)
+MAKE_TRAMPOLINE(18)
+MAKE_TRAMPOLINE(19)
+MAKE_TRAMPOLINE(20)
+MAKE_TRAMPOLINE(21)
+MAKE_TRAMPOLINE(22)
+MAKE_TRAMPOLINE(23)
+MAKE_TRAMPOLINE(24)
+MAKE_TRAMPOLINE(25)
+MAKE_TRAMPOLINE(26)
+MAKE_TRAMPOLINE(27)
+MAKE_TRAMPOLINE(28)
+MAKE_TRAMPOLINE(29)
+MAKE_TRAMPOLINE(30)
+MAKE_TRAMPOLINE(31)
+MAKE_TRAMPOLINE(32)
+MAKE_TRAMPOLINE(33)
+MAKE_TRAMPOLINE(34)
+MAKE_TRAMPOLINE(35)
+MAKE_TRAMPOLINE(36)
+MAKE_TRAMPOLINE(37)
+MAKE_TRAMPOLINE(38)
+MAKE_TRAMPOLINE(39)
+MAKE_TRAMPOLINE(40)
+MAKE_TRAMPOLINE(41)
+MAKE_TRAMPOLINE(42)
+MAKE_TRAMPOLINE(43)
+MAKE_TRAMPOLINE(44)
+MAKE_TRAMPOLINE(45)
+MAKE_TRAMPOLINE(46)
+MAKE_TRAMPOLINE(47)
+MAKE_TRAMPOLINE(48)
+MAKE_TRAMPOLINE(49)
+MAKE_TRAMPOLINE(50)
+MAKE_TRAMPOLINE(51)
+MAKE_TRAMPOLINE(52)
+MAKE_TRAMPOLINE(53)
+MAKE_TRAMPOLINE(54)
+MAKE_TRAMPOLINE(55)
+MAKE_TRAMPOLINE(56)
+MAKE_TRAMPOLINE(57)
+MAKE_TRAMPOLINE(58)
+MAKE_TRAMPOLINE(59)
+MAKE_TRAMPOLINE(60)
+MAKE_TRAMPOLINE(61)
+MAKE_TRAMPOLINE(62)
+MAKE_TRAMPOLINE(63)
+MAKE_TRAMPOLINE(64)
+MAKE_TRAMPOLINE(65)
+MAKE_TRAMPOLINE(66)
+MAKE_TRAMPOLINE(67)
+MAKE_TRAMPOLINE(68)
+MAKE_TRAMPOLINE(69)
+MAKE_TRAMPOLINE(70)
+MAKE_TRAMPOLINE(71)
+MAKE_TRAMPOLINE(72)
+MAKE_TRAMPOLINE(73)
+MAKE_TRAMPOLINE(74)
+MAKE_TRAMPOLINE(75)
+MAKE_TRAMPOLINE(76)
+MAKE_TRAMPOLINE(77)
+MAKE_TRAMPOLINE(78)
+MAKE_TRAMPOLINE(79)
+MAKE_TRAMPOLINE(80)
+MAKE_TRAMPOLINE(81)
+MAKE_TRAMPOLINE(82)
+MAKE_TRAMPOLINE(83)
+MAKE_TRAMPOLINE(84)
+MAKE_TRAMPOLINE(85)
+MAKE_TRAMPOLINE(86)
+MAKE_TRAMPOLINE(87)
+MAKE_TRAMPOLINE(88)
+MAKE_TRAMPOLINE(89)
+MAKE_TRAMPOLINE(90)
+MAKE_TRAMPOLINE(91)
+MAKE_TRAMPOLINE(92)
+MAKE_TRAMPOLINE(93)
+MAKE_TRAMPOLINE(94)
+MAKE_TRAMPOLINE(95)
+MAKE_TRAMPOLINE(96)
+MAKE_TRAMPOLINE(97)
+MAKE_TRAMPOLINE(98)
+MAKE_TRAMPOLINE(99)
+MAKE_TRAMPOLINE(100)
+MAKE_TRAMPOLINE(101)
+MAKE_TRAMPOLINE(102)
+MAKE_TRAMPOLINE(103)
+MAKE_TRAMPOLINE(104)
+MAKE_TRAMPOLINE(105)
+MAKE_TRAMPOLINE(106)
+MAKE_TRAMPOLINE(107)
+MAKE_TRAMPOLINE(108)
+MAKE_TRAMPOLINE(109)
+MAKE_TRAMPOLINE(110)
+MAKE_TRAMPOLINE(111)
+MAKE_TRAMPOLINE(112)
+MAKE_TRAMPOLINE(113)
+MAKE_TRAMPOLINE(114)
+MAKE_TRAMPOLINE(115)
+MAKE_TRAMPOLINE(116)
+MAKE_TRAMPOLINE(117)
+MAKE_TRAMPOLINE(118)
+MAKE_TRAMPOLINE(119)
+MAKE_TRAMPOLINE(120)
+MAKE_TRAMPOLINE(121)
+MAKE_TRAMPOLINE(122)
+MAKE_TRAMPOLINE(123)
+MAKE_TRAMPOLINE(124)
+MAKE_TRAMPOLINE(125)
+MAKE_TRAMPOLINE(126)
+MAKE_TRAMPOLINE(127)
+MAKE_TRAMPOLINE(128)
+MAKE_TRAMPOLINE(129)
+MAKE_TRAMPOLINE(130)
+MAKE_TRAMPOLINE(131)
+MAKE_TRAMPOLINE(132)
+MAKE_TRAMPOLINE(133)
+MAKE_TRAMPOLINE(134)
+MAKE_TRAMPOLINE(135)
+MAKE_TRAMPOLINE(136)
+MAKE_TRAMPOLINE(137)
+MAKE_TRAMPOLINE(138)
+MAKE_TRAMPOLINE(139)
+MAKE_TRAMPOLINE(140)
+MAKE_TRAMPOLINE(141)
+MAKE_TRAMPOLINE(142)
+MAKE_TRAMPOLINE(143)
+MAKE_TRAMPOLINE(144)
+MAKE_TRAMPOLINE(145)
+MAKE_TRAMPOLINE(146)
+MAKE_TRAMPOLINE(147)
+MAKE_TRAMPOLINE(148)
+MAKE_TRAMPOLINE(149)
+MAKE_TRAMPOLINE(150)
+MAKE_TRAMPOLINE(151)
+MAKE_TRAMPOLINE(152)
+MAKE_TRAMPOLINE(153)
+MAKE_TRAMPOLINE(154)
+MAKE_TRAMPOLINE(155)
+MAKE_TRAMPOLINE(156)
+MAKE_TRAMPOLINE(157)
+MAKE_TRAMPOLINE(158)
+MAKE_TRAMPOLINE(159)
+MAKE_TRAMPOLINE(160)
+MAKE_TRAMPOLINE(161)
+MAKE_TRAMPOLINE(162)
+MAKE_TRAMPOLINE(163)
+MAKE_TRAMPOLINE(164)
+MAKE_TRAMPOLINE(165)
+MAKE_TRAMPOLINE(166)
+MAKE_TRAMPOLINE(167)
+MAKE_TRAMPOLINE(168)
+MAKE_TRAMPOLINE(169)
+MAKE_TRAMPOLINE(170)
+MAKE_TRAMPOLINE(171)
+MAKE_TRAMPOLINE(172)
+MAKE_TRAMPOLINE(173)
+MAKE_TRAMPOLINE(174)
+MAKE_TRAMPOLINE(175)
+MAKE_TRAMPOLINE(176)
+MAKE_TRAMPOLINE(177)
+MAKE_TRAMPOLINE(178)
+MAKE_TRAMPOLINE(179)
+MAKE_TRAMPOLINE(180)
+MAKE_TRAMPOLINE(181)
+MAKE_TRAMPOLINE(182)
+MAKE_TRAMPOLINE(183)
+MAKE_TRAMPOLINE(184)
+MAKE_TRAMPOLINE(185)
+MAKE_TRAMPOLINE(186)
+MAKE_TRAMPOLINE(187)
+MAKE_TRAMPOLINE(188)
+MAKE_TRAMPOLINE(189)
+MAKE_TRAMPOLINE(190)
+MAKE_TRAMPOLINE(191)
+MAKE_TRAMPOLINE(192)
+MAKE_TRAMPOLINE(193)
+MAKE_TRAMPOLINE(194)
+MAKE_TRAMPOLINE(195)
+MAKE_TRAMPOLINE(196)
+MAKE_TRAMPOLINE(197)
+MAKE_TRAMPOLINE(198)
+MAKE_TRAMPOLINE(199)
+MAKE_TRAMPOLINE(200)
+MAKE_TRAMPOLINE(201)
+MAKE_TRAMPOLINE(202)
+MAKE_TRAMPOLINE(203)
+MAKE_TRAMPOLINE(204)
+MAKE_TRAMPOLINE(205)
+MAKE_TRAMPOLINE(206)
+MAKE_TRAMPOLINE(207)
+MAKE_TRAMPOLINE(208)
+MAKE_TRAMPOLINE(209)
+MAKE_TRAMPOLINE(210)
+MAKE_TRAMPOLINE(211)
+MAKE_TRAMPOLINE(212)
+MAKE_TRAMPOLINE(213)
+MAKE_TRAMPOLINE(214)
+MAKE_TRAMPOLINE(215)
+MAKE_TRAMPOLINE(216)
+MAKE_TRAMPOLINE(217)
+MAKE_TRAMPOLINE(218)
+MAKE_TRAMPOLINE(219)
+MAKE_TRAMPOLINE(220)
+MAKE_TRAMPOLINE(221)
+MAKE_TRAMPOLINE(222)
+MAKE_TRAMPOLINE(223)
+MAKE_TRAMPOLINE(224)
+MAKE_TRAMPOLINE(225)
+MAKE_TRAMPOLINE(226)
+MAKE_TRAMPOLINE(227)
+MAKE_TRAMPOLINE(228)
+MAKE_TRAMPOLINE(229)
+MAKE_TRAMPOLINE(230)
+MAKE_TRAMPOLINE(231)
+MAKE_TRAMPOLINE(232)
+MAKE_TRAMPOLINE(233)
+MAKE_TRAMPOLINE(234)
+MAKE_TRAMPOLINE(235)
+MAKE_TRAMPOLINE(236)
+MAKE_TRAMPOLINE(237)
+MAKE_TRAMPOLINE(238)
+MAKE_TRAMPOLINE(239)
+MAKE_TRAMPOLINE(240)
+MAKE_TRAMPOLINE(241)
+MAKE_TRAMPOLINE(242)
+MAKE_TRAMPOLINE(243)
+MAKE_TRAMPOLINE(244)
+MAKE_TRAMPOLINE(245)
+MAKE_TRAMPOLINE(246)
+MAKE_TRAMPOLINE(247)
+MAKE_TRAMPOLINE(248)
+MAKE_TRAMPOLINE(249)
+MAKE_TRAMPOLINE(250)
+MAKE_TRAMPOLINE(251)
+MAKE_TRAMPOLINE(252)
+MAKE_TRAMPOLINE(253)
+MAKE_TRAMPOLINE(254)
+MAKE_TRAMPOLINE(255)
+MAKE_TRAMPOLINE(256)
+MAKE_TRAMPOLINE(257)
+MAKE_TRAMPOLINE(258)
+MAKE_TRAMPOLINE(259)
+MAKE_TRAMPOLINE(260)
+MAKE_TRAMPOLINE(261)
+MAKE_TRAMPOLINE(262)
+MAKE_TRAMPOLINE(263)
+MAKE_TRAMPOLINE(264)
+MAKE_TRAMPOLINE(265)
+MAKE_TRAMPOLINE(266)
+MAKE_TRAMPOLINE(267)
+MAKE_TRAMPOLINE(268)
+MAKE_TRAMPOLINE(269)
+MAKE_TRAMPOLINE(270)
+MAKE_TRAMPOLINE(271)
+MAKE_TRAMPOLINE(272)
+MAKE_TRAMPOLINE(273)
+MAKE_TRAMPOLINE(274)
+MAKE_TRAMPOLINE(275)
+MAKE_TRAMPOLINE(276)
+MAKE_TRAMPOLINE(277)
+MAKE_TRAMPOLINE(278)
+MAKE_TRAMPOLINE(279)
+MAKE_TRAMPOLINE(280)
+MAKE_TRAMPOLINE(281)
+MAKE_TRAMPOLINE(282)
+MAKE_TRAMPOLINE(283)
+MAKE_TRAMPOLINE(284)
+MAKE_TRAMPOLINE(285)
+MAKE_TRAMPOLINE(286)
+MAKE_TRAMPOLINE(287)
+MAKE_TRAMPOLINE(288)
+MAKE_TRAMPOLINE(289)
+MAKE_TRAMPOLINE(290)
+MAKE_TRAMPOLINE(291)
+MAKE_TRAMPOLINE(292)
+MAKE_TRAMPOLINE(293)
+MAKE_TRAMPOLINE(294)
+MAKE_TRAMPOLINE(295)
+MAKE_TRAMPOLINE(296)
+MAKE_TRAMPOLINE(297)
+MAKE_TRAMPOLINE(298)
+MAKE_TRAMPOLINE(299)
+MAKE_TRAMPOLINE(300)
+MAKE_TRAMPOLINE(301)
+MAKE_TRAMPOLINE(302)
+MAKE_TRAMPOLINE(303)
+MAKE_TRAMPOLINE(304)
+MAKE_TRAMPOLINE(305)
+MAKE_TRAMPOLINE(306)
+MAKE_TRAMPOLINE(307)
+MAKE_TRAMPOLINE(308)
+MAKE_TRAMPOLINE(309)
+MAKE_TRAMPOLINE(310)
+MAKE_TRAMPOLINE(311)
+MAKE_TRAMPOLINE(312)
+MAKE_TRAMPOLINE(313)
+MAKE_TRAMPOLINE(314)
+MAKE_TRAMPOLINE(315)
+MAKE_TRAMPOLINE(316)
+MAKE_TRAMPOLINE(317)
+MAKE_TRAMPOLINE(318)
+MAKE_TRAMPOLINE(319)
+MAKE_TRAMPOLINE(320)
+MAKE_TRAMPOLINE(321)
+MAKE_TRAMPOLINE(322)
+MAKE_TRAMPOLINE(323)
+MAKE_TRAMPOLINE(324)
+MAKE_TRAMPOLINE(325)
+MAKE_TRAMPOLINE(326)
+MAKE_TRAMPOLINE(327)
+MAKE_TRAMPOLINE(328)
+MAKE_TRAMPOLINE(329)
+MAKE_TRAMPOLINE(330)
+MAKE_TRAMPOLINE(331)
+MAKE_TRAMPOLINE(332)
+MAKE_TRAMPOLINE(333)
+MAKE_TRAMPOLINE(334)
+MAKE_TRAMPOLINE(335)
+MAKE_TRAMPOLINE(336)
+MAKE_TRAMPOLINE(337)
+MAKE_TRAMPOLINE(338)
+MAKE_TRAMPOLINE(339)
+MAKE_TRAMPOLINE(340)
+MAKE_TRAMPOLINE(341)
+MAKE_TRAMPOLINE(342)
+MAKE_TRAMPOLINE(343)
+MAKE_TRAMPOLINE(344)
+MAKE_TRAMPOLINE(345)
+MAKE_TRAMPOLINE(346)
+MAKE_TRAMPOLINE(347)
+MAKE_TRAMPOLINE(348)
+MAKE_TRAMPOLINE(349)
+MAKE_TRAMPOLINE(350)
+MAKE_TRAMPOLINE(351)
+MAKE_TRAMPOLINE(352)
+MAKE_TRAMPOLINE(353)
+MAKE_TRAMPOLINE(354)
+MAKE_TRAMPOLINE(355)
+MAKE_TRAMPOLINE(356)
+MAKE_TRAMPOLINE(357)
+MAKE_TRAMPOLINE(358)
+MAKE_TRAMPOLINE(359)
+MAKE_TRAMPOLINE(360)
+MAKE_TRAMPOLINE(361)
+MAKE_TRAMPOLINE(362)
+MAKE_TRAMPOLINE(363)
+MAKE_TRAMPOLINE(364)
+MAKE_TRAMPOLINE(365)
+MAKE_TRAMPOLINE(366)
+MAKE_TRAMPOLINE(367)
+MAKE_TRAMPOLINE(368)
+MAKE_TRAMPOLINE(369)
+MAKE_TRAMPOLINE(370)
+MAKE_TRAMPOLINE(371)
+MAKE_TRAMPOLINE(372)
+MAKE_TRAMPOLINE(373)
+MAKE_TRAMPOLINE(374)
+MAKE_TRAMPOLINE(375)
+MAKE_TRAMPOLINE(376)
+MAKE_TRAMPOLINE(377)
+MAKE_TRAMPOLINE(378)
+MAKE_TRAMPOLINE(379)
+MAKE_TRAMPOLINE(380)
+MAKE_TRAMPOLINE(381)
+MAKE_TRAMPOLINE(382)
+MAKE_TRAMPOLINE(383)
+MAKE_TRAMPOLINE(384)
+MAKE_TRAMPOLINE(385)
+MAKE_TRAMPOLINE(386)
+MAKE_TRAMPOLINE(387)
+MAKE_TRAMPOLINE(388)
+MAKE_TRAMPOLINE(389)
+MAKE_TRAMPOLINE(390)
+MAKE_TRAMPOLINE(391)
+MAKE_TRAMPOLINE(392)
+MAKE_TRAMPOLINE(393)
+MAKE_TRAMPOLINE(394)
+MAKE_TRAMPOLINE(395)
+MAKE_TRAMPOLINE(396)
+MAKE_TRAMPOLINE(397)
+MAKE_TRAMPOLINE(398)
+MAKE_TRAMPOLINE(399)
+MAKE_TRAMPOLINE(400)
+MAKE_TRAMPOLINE(401)
+MAKE_TRAMPOLINE(402)
+MAKE_TRAMPOLINE(403)
+MAKE_TRAMPOLINE(404)
+MAKE_TRAMPOLINE(405)
+MAKE_TRAMPOLINE(406)
+MAKE_TRAMPOLINE(407)
+MAKE_TRAMPOLINE(408)
+MAKE_TRAMPOLINE(409)
+MAKE_TRAMPOLINE(410)
+MAKE_TRAMPOLINE(411)
+MAKE_TRAMPOLINE(412)
+MAKE_TRAMPOLINE(413)
+MAKE_TRAMPOLINE(414)
+MAKE_TRAMPOLINE(415)
+MAKE_TRAMPOLINE(416)
+MAKE_TRAMPOLINE(417)
+MAKE_TRAMPOLINE(418)
+MAKE_TRAMPOLINE(419)
+MAKE_TRAMPOLINE(420)
+MAKE_TRAMPOLINE(421)
+MAKE_TRAMPOLINE(422)
+MAKE_TRAMPOLINE(423)
+MAKE_TRAMPOLINE(424)
+MAKE_TRAMPOLINE(425)
+MAKE_TRAMPOLINE(426)
+MAKE_TRAMPOLINE(427)
+MAKE_TRAMPOLINE(428)
+MAKE_TRAMPOLINE(429)
+MAKE_TRAMPOLINE(430)
+MAKE_TRAMPOLINE(431)
+MAKE_TRAMPOLINE(432)
+MAKE_TRAMPOLINE(433)
+MAKE_TRAMPOLINE(434)
+MAKE_TRAMPOLINE(435)
+MAKE_TRAMPOLINE(436)
+MAKE_TRAMPOLINE(437)
+MAKE_TRAMPOLINE(438)
+MAKE_TRAMPOLINE(439)
+MAKE_TRAMPOLINE(440)
+MAKE_TRAMPOLINE(441)
+MAKE_TRAMPOLINE(442)
+MAKE_TRAMPOLINE(443)
+MAKE_TRAMPOLINE(444)
+MAKE_TRAMPOLINE(445)
+MAKE_TRAMPOLINE(446)
+MAKE_TRAMPOLINE(447)
+MAKE_TRAMPOLINE(448)
+MAKE_TRAMPOLINE(449)
+MAKE_TRAMPOLINE(450)
+MAKE_TRAMPOLINE(451)
+MAKE_TRAMPOLINE(452)
+MAKE_TRAMPOLINE(453)
+MAKE_TRAMPOLINE(454)
+MAKE_TRAMPOLINE(455)
+MAKE_TRAMPOLINE(456)
+MAKE_TRAMPOLINE(457)
+MAKE_TRAMPOLINE(458)
+MAKE_TRAMPOLINE(459)
+MAKE_TRAMPOLINE(460)
+MAKE_TRAMPOLINE(461)
+MAKE_TRAMPOLINE(462)
+MAKE_TRAMPOLINE(463)
+MAKE_TRAMPOLINE(464)
+MAKE_TRAMPOLINE(465)
+MAKE_TRAMPOLINE(466)
+MAKE_TRAMPOLINE(467)
+MAKE_TRAMPOLINE(468)
+MAKE_TRAMPOLINE(469)
+MAKE_TRAMPOLINE(470)
+MAKE_TRAMPOLINE(471)
+MAKE_TRAMPOLINE(472)
+MAKE_TRAMPOLINE(473)
+MAKE_TRAMPOLINE(474)
+MAKE_TRAMPOLINE(475)
+MAKE_TRAMPOLINE(476)
+MAKE_TRAMPOLINE(477)
+MAKE_TRAMPOLINE(478)
+MAKE_TRAMPOLINE(479)
+MAKE_TRAMPOLINE(480)
+MAKE_TRAMPOLINE(481)
+MAKE_TRAMPOLINE(482)
+MAKE_TRAMPOLINE(483)
+MAKE_TRAMPOLINE(484)
+MAKE_TRAMPOLINE(485)
+MAKE_TRAMPOLINE(486)
+MAKE_TRAMPOLINE(487)
+MAKE_TRAMPOLINE(488)
+MAKE_TRAMPOLINE(489)
+MAKE_TRAMPOLINE(490)
+MAKE_TRAMPOLINE(491)
+MAKE_TRAMPOLINE(492)
+MAKE_TRAMPOLINE(493)
+MAKE_TRAMPOLINE(494)
+MAKE_TRAMPOLINE(495)
+MAKE_TRAMPOLINE(496)
+MAKE_TRAMPOLINE(497)
+MAKE_TRAMPOLINE(498)
+MAKE_TRAMPOLINE(499)
+MAKE_TRAMPOLINE(500)
+MAKE_TRAMPOLINE(501)
+MAKE_TRAMPOLINE(502)
+MAKE_TRAMPOLINE(503)
+MAKE_TRAMPOLINE(504)
+MAKE_TRAMPOLINE(505)
+MAKE_TRAMPOLINE(506)
+MAKE_TRAMPOLINE(507)
+MAKE_TRAMPOLINE(508)
+MAKE_TRAMPOLINE(509)
+MAKE_TRAMPOLINE(510)
+MAKE_TRAMPOLINE(511)
+
+static void *g_trampolines[] = {
+    trampoline_0,
+    trampoline_1,
+    trampoline_2,
+    trampoline_3,
+    trampoline_4,
+    trampoline_5,
+    trampoline_6,
+    trampoline_7,
+    trampoline_8,
+    trampoline_9,
+    trampoline_10,
+    trampoline_11,
+    trampoline_12,
+    trampoline_13,
+    trampoline_14,
+    trampoline_15,
+    trampoline_16,
+    trampoline_17,
+    trampoline_18,
+    trampoline_19,
+    trampoline_20,
+    trampoline_21,
+    trampoline_22,
+    trampoline_23,
+    trampoline_24,
+    trampoline_25,
+    trampoline_26,
+    trampoline_27,
+    trampoline_28,
+    trampoline_29,
+    trampoline_30,
+    trampoline_31,
+    trampoline_32,
+    trampoline_33,
+    trampoline_34,
+    trampoline_35,
+    trampoline_36,
+    trampoline_37,
+    trampoline_38,
+    trampoline_39,
+    trampoline_40,
+    trampoline_41,
+    trampoline_42,
+    trampoline_43,
+    trampoline_44,
+    trampoline_45,
+    trampoline_46,
+    trampoline_47,
+    trampoline_48,
+    trampoline_49,
+    trampoline_50,
+    trampoline_51,
+    trampoline_52,
+    trampoline_53,
+    trampoline_54,
+    trampoline_55,
+    trampoline_56,
+    trampoline_57,
+    trampoline_58,
+    trampoline_59,
+    trampoline_60,
+    trampoline_61,
+    trampoline_62,
+    trampoline_63,
+    trampoline_64,
+    trampoline_65,
+    trampoline_66,
+    trampoline_67,
+    trampoline_68,
+    trampoline_69,
+    trampoline_70,
+    trampoline_71,
+    trampoline_72,
+    trampoline_73,
+    trampoline_74,
+    trampoline_75,
+    trampoline_76,
+    trampoline_77,
+    trampoline_78,
+    trampoline_79,
+    trampoline_80,
+    trampoline_81,
+    trampoline_82,
+    trampoline_83,
+    trampoline_84,
+    trampoline_85,
+    trampoline_86,
+    trampoline_87,
+    trampoline_88,
+    trampoline_89,
+    trampoline_90,
+    trampoline_91,
+    trampoline_92,
+    trampoline_93,
+    trampoline_94,
+    trampoline_95,
+    trampoline_96,
+    trampoline_97,
+    trampoline_98,
+    trampoline_99,
+    trampoline_100,
+    trampoline_101,
+    trampoline_102,
+    trampoline_103,
+    trampoline_104,
+    trampoline_105,
+    trampoline_106,
+    trampoline_107,
+    trampoline_108,
+    trampoline_109,
+    trampoline_110,
+    trampoline_111,
+    trampoline_112,
+    trampoline_113,
+    trampoline_114,
+    trampoline_115,
+    trampoline_116,
+    trampoline_117,
+    trampoline_118,
+    trampoline_119,
+    trampoline_120,
+    trampoline_121,
+    trampoline_122,
+    trampoline_123,
+    trampoline_124,
+    trampoline_125,
+    trampoline_126,
+    trampoline_127,
+    trampoline_128,
+    trampoline_129,
+    trampoline_130,
+    trampoline_131,
+    trampoline_132,
+    trampoline_133,
+    trampoline_134,
+    trampoline_135,
+    trampoline_136,
+    trampoline_137,
+    trampoline_138,
+    trampoline_139,
+    trampoline_140,
+    trampoline_141,
+    trampoline_142,
+    trampoline_143,
+    trampoline_144,
+    trampoline_145,
+    trampoline_146,
+    trampoline_147,
+    trampoline_148,
+    trampoline_149,
+    trampoline_150,
+    trampoline_151,
+    trampoline_152,
+    trampoline_153,
+    trampoline_154,
+    trampoline_155,
+    trampoline_156,
+    trampoline_157,
+    trampoline_158,
+    trampoline_159,
+    trampoline_160,
+    trampoline_161,
+    trampoline_162,
+    trampoline_163,
+    trampoline_164,
+    trampoline_165,
+    trampoline_166,
+    trampoline_167,
+    trampoline_168,
+    trampoline_169,
+    trampoline_170,
+    trampoline_171,
+    trampoline_172,
+    trampoline_173,
+    trampoline_174,
+    trampoline_175,
+    trampoline_176,
+    trampoline_177,
+    trampoline_178,
+    trampoline_179,
+    trampoline_180,
+    trampoline_181,
+    trampoline_182,
+    trampoline_183,
+    trampoline_184,
+    trampoline_185,
+    trampoline_186,
+    trampoline_187,
+    trampoline_188,
+    trampoline_189,
+    trampoline_190,
+    trampoline_191,
+    trampoline_192,
+    trampoline_193,
+    trampoline_194,
+    trampoline_195,
+    trampoline_196,
+    trampoline_197,
+    trampoline_198,
+    trampoline_199,
+    trampoline_200,
+    trampoline_201,
+    trampoline_202,
+    trampoline_203,
+    trampoline_204,
+    trampoline_205,
+    trampoline_206,
+    trampoline_207,
+    trampoline_208,
+    trampoline_209,
+    trampoline_210,
+    trampoline_211,
+    trampoline_212,
+    trampoline_213,
+    trampoline_214,
+    trampoline_215,
+    trampoline_216,
+    trampoline_217,
+    trampoline_218,
+    trampoline_219,
+    trampoline_220,
+    trampoline_221,
+    trampoline_222,
+    trampoline_223,
+    trampoline_224,
+    trampoline_225,
+    trampoline_226,
+    trampoline_227,
+    trampoline_228,
+    trampoline_229,
+    trampoline_230,
+    trampoline_231,
+    trampoline_232,
+    trampoline_233,
+    trampoline_234,
+    trampoline_235,
+    trampoline_236,
+    trampoline_237,
+    trampoline_238,
+    trampoline_239,
+    trampoline_240,
+    trampoline_241,
+    trampoline_242,
+    trampoline_243,
+    trampoline_244,
+    trampoline_245,
+    trampoline_246,
+    trampoline_247,
+    trampoline_248,
+    trampoline_249,
+    trampoline_250,
+    trampoline_251,
+    trampoline_252,
+    trampoline_253,
+    trampoline_254,
+    trampoline_255,
+    trampoline_256,
+    trampoline_257,
+    trampoline_258,
+    trampoline_259,
+    trampoline_260,
+    trampoline_261,
+    trampoline_262,
+    trampoline_263,
+    trampoline_264,
+    trampoline_265,
+    trampoline_266,
+    trampoline_267,
+    trampoline_268,
+    trampoline_269,
+    trampoline_270,
+    trampoline_271,
+    trampoline_272,
+    trampoline_273,
+    trampoline_274,
+    trampoline_275,
+    trampoline_276,
+    trampoline_277,
+    trampoline_278,
+    trampoline_279,
+    trampoline_280,
+    trampoline_281,
+    trampoline_282,
+    trampoline_283,
+    trampoline_284,
+    trampoline_285,
+    trampoline_286,
+    trampoline_287,
+    trampoline_288,
+    trampoline_289,
+    trampoline_290,
+    trampoline_291,
+    trampoline_292,
+    trampoline_293,
+    trampoline_294,
+    trampoline_295,
+    trampoline_296,
+    trampoline_297,
+    trampoline_298,
+    trampoline_299,
+    trampoline_300,
+    trampoline_301,
+    trampoline_302,
+    trampoline_303,
+    trampoline_304,
+    trampoline_305,
+    trampoline_306,
+    trampoline_307,
+    trampoline_308,
+    trampoline_309,
+    trampoline_310,
+    trampoline_311,
+    trampoline_312,
+    trampoline_313,
+    trampoline_314,
+    trampoline_315,
+    trampoline_316,
+    trampoline_317,
+    trampoline_318,
+    trampoline_319,
+    trampoline_320,
+    trampoline_321,
+    trampoline_322,
+    trampoline_323,
+    trampoline_324,
+    trampoline_325,
+    trampoline_326,
+    trampoline_327,
+    trampoline_328,
+    trampoline_329,
+    trampoline_330,
+    trampoline_331,
+    trampoline_332,
+    trampoline_333,
+    trampoline_334,
+    trampoline_335,
+    trampoline_336,
+    trampoline_337,
+    trampoline_338,
+    trampoline_339,
+    trampoline_340,
+    trampoline_341,
+    trampoline_342,
+    trampoline_343,
+    trampoline_344,
+    trampoline_345,
+    trampoline_346,
+    trampoline_347,
+    trampoline_348,
+    trampoline_349,
+    trampoline_350,
+    trampoline_351,
+    trampoline_352,
+    trampoline_353,
+    trampoline_354,
+    trampoline_355,
+    trampoline_356,
+    trampoline_357,
+    trampoline_358,
+    trampoline_359,
+    trampoline_360,
+    trampoline_361,
+    trampoline_362,
+    trampoline_363,
+    trampoline_364,
+    trampoline_365,
+    trampoline_366,
+    trampoline_367,
+    trampoline_368,
+    trampoline_369,
+    trampoline_370,
+    trampoline_371,
+    trampoline_372,
+    trampoline_373,
+    trampoline_374,
+    trampoline_375,
+    trampoline_376,
+    trampoline_377,
+    trampoline_378,
+    trampoline_379,
+    trampoline_380,
+    trampoline_381,
+    trampoline_382,
+    trampoline_383,
+    trampoline_384,
+    trampoline_385,
+    trampoline_386,
+    trampoline_387,
+    trampoline_388,
+    trampoline_389,
+    trampoline_390,
+    trampoline_391,
+    trampoline_392,
+    trampoline_393,
+    trampoline_394,
+    trampoline_395,
+    trampoline_396,
+    trampoline_397,
+    trampoline_398,
+    trampoline_399,
+    trampoline_400,
+    trampoline_401,
+    trampoline_402,
+    trampoline_403,
+    trampoline_404,
+    trampoline_405,
+    trampoline_406,
+    trampoline_407,
+    trampoline_408,
+    trampoline_409,
+    trampoline_410,
+    trampoline_411,
+    trampoline_412,
+    trampoline_413,
+    trampoline_414,
+    trampoline_415,
+    trampoline_416,
+    trampoline_417,
+    trampoline_418,
+    trampoline_419,
+    trampoline_420,
+    trampoline_421,
+    trampoline_422,
+    trampoline_423,
+    trampoline_424,
+    trampoline_425,
+    trampoline_426,
+    trampoline_427,
+    trampoline_428,
+    trampoline_429,
+    trampoline_430,
+    trampoline_431,
+    trampoline_432,
+    trampoline_433,
+    trampoline_434,
+    trampoline_435,
+    trampoline_436,
+    trampoline_437,
+    trampoline_438,
+    trampoline_439,
+    trampoline_440,
+    trampoline_441,
+    trampoline_442,
+    trampoline_443,
+    trampoline_444,
+    trampoline_445,
+    trampoline_446,
+    trampoline_447,
+    trampoline_448,
+    trampoline_449,
+    trampoline_450,
+    trampoline_451,
+    trampoline_452,
+    trampoline_453,
+    trampoline_454,
+    trampoline_455,
+    trampoline_456,
+    trampoline_457,
+    trampoline_458,
+    trampoline_459,
+    trampoline_460,
+    trampoline_461,
+    trampoline_462,
+    trampoline_463,
+    trampoline_464,
+    trampoline_465,
+    trampoline_466,
+    trampoline_467,
+    trampoline_468,
+    trampoline_469,
+    trampoline_470,
+    trampoline_471,
+    trampoline_472,
+    trampoline_473,
+    trampoline_474,
+    trampoline_475,
+    trampoline_476,
+    trampoline_477,
+    trampoline_478,
+    trampoline_479,
+    trampoline_480,
+    trampoline_481,
+    trampoline_482,
+    trampoline_483,
+    trampoline_484,
+    trampoline_485,
+    trampoline_486,
+    trampoline_487,
+    trampoline_488,
+    trampoline_489,
+    trampoline_490,
+    trampoline_491,
+    trampoline_492,
+    trampoline_493,
+    trampoline_494,
+    trampoline_495,
+    trampoline_496,
+    trampoline_497,
+    trampoline_498,
+    trampoline_499,
+    trampoline_500,
+    trampoline_501,
+    trampoline_502,
+    trampoline_503,
+    trampoline_504,
+    trampoline_505,
+    trampoline_506,
+    trampoline_507,
+    trampoline_508,
+    trampoline_509,
+    trampoline_510,
+    trampoline_511,
+};
+#define MAX_TRAMPOLINES (sizeof(g_trampolines)/sizeof(g_trampolines[0]))

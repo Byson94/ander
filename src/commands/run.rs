@@ -88,11 +88,9 @@ pub fn extract_libgdx_version(jar: &Path) -> anyhow::Result<String> {
 
 pub fn get_package_name(extracted_dir: &Path) -> anyhow::Result<String> {
     let bytes = std::fs::read(extracted_dir.join("AndroidManifest.xml"))?;
-    
     let words: Vec<u16> = bytes.chunks_exact(2)
         .map(|c| u16::from_le_bytes([c[0], c[1]]))
         .collect();
-    
     let mut i = 0;
     while i < words.len() {
         let len = words[i] as usize;
@@ -104,6 +102,8 @@ pub fn get_package_name(extracted_dir: &Path) -> anyhow::Result<String> {
             if parts.len() >= 2
                 && parts.iter().all(|p| !p.is_empty()
                     && p.chars().all(|c| c.is_ascii_alphanumeric() || c == '_'))
+                && parts[0].starts_with(|c: char| c.is_ascii_alphabetic())
+                && parts.iter().all(|p| p.starts_with(|c: char| c.is_ascii_alphabetic()))
             {
                 return Ok(s);
             }

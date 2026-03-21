@@ -107,6 +107,7 @@ fn is_gdx_game_class(class_name: &str, zip: &mut ZipArchive<std::fs::File>) -> b
     let mut current = class_name.to_string();
     for _ in 0..10 {
         if current == "com/badlogic/gdx/Game"
+            || current == "com/badlogic/gdx/ApplicationAdapter"
             || current == "com/badlogic/gdx/ApplicationListener" {
             return true;
         }

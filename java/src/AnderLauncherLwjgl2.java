@@ -15,6 +15,9 @@ public class AnderLauncherLwjgl2 {
         int height = Integer.parseInt(args[2]);
         String title = args[3];
 
+        AnderBridge.connect();
+        System.out.println("[ander] AnderBridge connected to bionic launcher");
+
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = title;
         config.width = width;
@@ -65,8 +68,18 @@ public class AnderLauncherLwjgl2 {
             else if (t == long.class)    params[i] = 0L;
             else if (t == float.class)   params[i] = 0.0f;
             else if (t == double.class)  params[i] = 0.0;
+            else if (isActivityType(t))  params[i] = new android.app.Activity();
             else                         params[i] = null;
         }
         return params;
+    }
+
+    private static boolean isActivityType(Class<?> t) {
+        Class<?> c = t;
+        while (c != null) {
+            if (c.getName().equals("android.app.Activity")) return true;
+            c = c.getSuperclass();
+        }
+        return false;
     }
 }

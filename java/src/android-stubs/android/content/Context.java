@@ -54,6 +54,9 @@ public class Context {
     }
 
     // == Resources / package (stubs) ==
+    public android.content.res.Resources getResources() {
+        return new android.content.res.Resources();
+    }
     public String getPackageName() { return "com.desktop.stub"; }
     public String getString(int resId) { return ""; }
     public String getString(int resId, Object... formatArgs) { return ""; }
