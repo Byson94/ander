@@ -59,6 +59,7 @@ pub fn libgdx_run(apk: &Path) -> anyhow::Result<()> {
     let working_dir = if assets_dir.exists() {
         assets_dir
     } else {
+        log::warn!("Failed to find assets directory.");
         tmp.path().to_path_buf()
     };
 

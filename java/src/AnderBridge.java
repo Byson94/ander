@@ -12,7 +12,7 @@ public class AnderBridge {
         try {
             cls = Class.forName(className);
         } catch (Throwable t) {
-            System.err.println("[AnderBridge] skipping unloadable class: " + className + " — " + t.getMessage());
+            System.err.println("[AnderBridge] skipping unloadable class: " + className + " -- " + t.getMessage());
             return;
         }
         for (Method m : cls.getDeclaredMethods()) {
