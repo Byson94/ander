@@ -1,4 +1,5 @@
 use std::path::{PathBuf, Path};
+use std::fs;
 use crate::apk::Framework;
 use zip::ZipArchive;
 use std::io::Read;
@@ -32,17 +33,28 @@ pub fn libgdx_run(apk: &Path) -> anyhow::Result<()> {
 
     log::debug!("Extraction complete. Extracted to: {}", tmp.path().display());
 
+    // Extracting application name
+    let app_name = get_package_name(tmp.path())?;
+    log::info!("Extracted package name: {}", app_name);
+
     // Convert dex to jar
+    let apps_dir = crate::utils::get_app_data_dir(&app_name)?;
     let app_jar = tmp.path().join("application.jar");
-    crate::apk::dex::dex_to_jar(&tmp.path(), &app_jar)?;
+
+    if !apps_dir.is_dir() {
+        crate::apk::dex::dex_to_jar(&tmp.path(), &app_jar)?;
+
+        fs::create_dir_all(&apps_dir)?;
+        fs::copy(&app_jar, apps_dir.join("application.jar"))?;
+        log::info!("Cached generated application.jar to {}", apps_dir.display());
+    } else {
+        log::info!("Using application.jar cached in {}", apps_dir.display());
+        fs::copy(apps_dir.join("application.jar"), &app_jar)?;
+    }
 
     // Extracting LibGDX version for installation of dependencies
     let libgdx_version = extract_libgdx_version(&app_jar)?;
     log::info!("Detected LibGDX version: {}", libgdx_version);
-
-    // Extracting application name
-    let app_name = get_package_name(tmp.path())?;
-    log::info!("Extracted package name: {}", app_name);
 
     // Ensure LWJGL/LibGDX desktop jars are cached
     let lib_dir = crate::deps::ensure_libgdx_deps(&libgdx_version)?;
@@ -89,27 +101,18 @@ pub fn extract_libgdx_version(jar: &Path) -> anyhow::Result<String> {
 
 pub fn get_package_name(extracted_dir: &Path) -> anyhow::Result<String> {
     let bytes = std::fs::read(extracted_dir.join("AndroidManifest.xml"))?;
-    let words: Vec<u16> = bytes.chunks_exact(2)
-        .map(|c| u16::from_le_bytes([c[0], c[1]]))
-        .collect();
-    let mut i = 0;
-    while i < words.len() {
-        let len = words[i] as usize;
-        if len > 2 && len < 100 && i + len < words.len() {
-            let s: String = char::decode_utf16(words[i+1..i+1+len].iter().copied())
-                .filter_map(|r| r.ok())
-                .collect();
-            let parts: Vec<&str> = s.split('.').collect();
-            if parts.len() >= 2
-                && parts.iter().all(|p| !p.is_empty()
-                    && p.chars().all(|c| c.is_ascii_alphanumeric() || c == '_'))
-                && parts[0].starts_with(|c: char| c.is_ascii_alphabetic())
-                && parts.iter().all(|p| p.starts_with(|c: char| c.is_ascii_alphabetic()))
-            {
-                return Ok(s);
-            }
+    let manifest = axmldecoder::parse(&bytes)?;
+
+    let root = manifest
+        .get_root()
+        .as_ref()
+        .ok_or_else(|| anyhow::anyhow!("AndroidManifest.xml has no root element"))?;
+
+    if let axmldecoder::Node::Element(element) = root {
+        if let Some(package) = element.get_attributes().get("package") {
+            return Ok(package.clone());
         }
-        i += 1;
     }
-    anyhow::bail!("Could not extract package name from AndroidManifest.xml")
+
+    anyhow::bail!("No package attribute found in AndroidManifest.xml")
 }

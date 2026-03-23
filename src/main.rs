@@ -4,6 +4,7 @@ mod apk;
 mod jvm;
 mod launcher;
 mod deps;
+mod utils;
 
 use clap::Parser;
 use opts::{Cli, Commands};

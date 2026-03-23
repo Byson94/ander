@@ -22,23 +22,25 @@ fn get_cache_dir(path: &str) -> anyhow::Result<PathBuf> {
 }
 
 fn download_libgdx_deps(version: &str, cache_dir: &Path, lwjgl3: bool) -> anyhow::Result<()> {
-    // Dependencies that both will share.
-    let mut jars = vec![
-        // Core libgdx stuff
-        format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-platform/{v}/gdx-platform-{v}-natives-desktop.jar", v = version),
-        format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-freetype/{v}/gdx-freetype-{v}.jar", v = version),
-        format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-freetype-platform/{v}/gdx-freetype-platform-{v}-natives-desktop.jar", v = version),
-        // JLayer: MP3 audio decoding (gdx fork)
-        "https://repo1.maven.org/maven2/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.jar".to_string(),
-        // xerial sqlite-jdbc: SQLite driver (replaces Android's built-in SQLite)
-        "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar".to_string(),
-        // slf4j-api: logging facade (required by sqlite-jdbc)
-        "https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar".to_string(),
-        // slf4j-simple: minimal slf4j binding, prints to stdout
-        "https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36.jar".to_string(),
-        // org.json: JSON parsing
-        "https://repo1.maven.org/maven2/org/json/json/20240303/json-20240303.jar".to_string(),
-    ];
+    // // Dependencies that both will share.
+    // let mut jars = vec![
+    //     // Core libgdx stuff
+    //     format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-platform/{v}/gdx-platform-{v}-natives-desktop.jar", v = version),
+    //     format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-freetype/{v}/gdx-freetype-{v}.jar", v = version),
+    //     format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-freetype-platform/{v}/gdx-freetype-platform-{v}-natives-desktop.jar", v = version),
+    //     // JLayer: MP3 audio decoding (gdx fork)
+    //     "https://repo1.maven.org/maven2/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.jar".to_string(),
+    //     // xerial sqlite-jdbc: SQLite driver (replaces Android's built-in SQLite)
+    //     "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar".to_string(),
+    //     // slf4j-api: logging facade (required by sqlite-jdbc)
+    //     "https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar".to_string(),
+    //     // slf4j-simple: minimal slf4j binding, prints to stdout
+    //     "https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36.jar".to_string(),
+    //     // org.json: JSON parsing
+    //     "https://repo1.maven.org/maven2/org/json/json/20240303/json-20240303.jar".to_string(),
+    // ];
+
+    let mut jars = vec![];
 
     if lwjgl3 {
         jars.push(format!("https://repo1.maven.org/maven2/com/badlogicgames/gdx/gdx-backend-lwjgl3/{v}/gdx-backend-lwjgl3-{v}.jar", v = version));
