@@ -50,19 +50,51 @@ public class SharedLibraryLoader {
     }
 
     private String symbolToClassName(String sym) {
-        if (!sym.startsWith("Java_")) return null;
-        String[] parts = sym.substring(5).split("_");
-        StringBuilder cls = new StringBuilder();
-        for (String part : parts) {
-            if (part.isEmpty()) continue;
-            if (Character.isUpperCase(part.charAt(0))) {
-                if (cls.length() > 0) cls.append('.');
-                cls.append(part);
-                break;
+        if (sym == null || !sym.startsWith("Java_")) return null;
+
+        String body = sym.substring(5);
+
+        // Decode JNI mangling: _00024 -> $, _1 -> _, then split on _ for dots
+        String decoded = decodeJniName(body);
+
+        int lastDot = decoded.lastIndexOf('_');
+        int lastSep = decoded.lastIndexOf('.');
+        if (lastSep < 0) return null;
+
+        return decoded.substring(0, lastSep);
+    }
+
+    private String decodeJniName(String mangled) {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        while (i < mangled.length()) {
+            char c = mangled.charAt(i);
+            if (c == '_') {
+                if (i + 1 < mangled.length()) {
+                    char next = mangled.charAt(i + 1);
+                    if (next == '1') {
+                        sb.append('_'); i += 2; continue;
+                    } else if (next == '2') {
+                        sb.append(';'); i += 2; continue;
+                    } else if (next == '3') {
+                        sb.append('['); i += 2; continue;
+                    } else if (next == '0' && i + 5 < mangled.length()) {
+                        // _0XXXX unicode escape
+                        String hex = mangled.substring(i + 2, i + 6);
+                        if (hex.matches("[0-9a-fA-F]{4}")) {
+                            sb.append((char) Integer.parseInt(hex, 16));
+                            i += 6; continue;
+                        }
+                    }
+                }
+                // Plain '_' is a package/class separator -> '.'
+                sb.append('.');
+                i++;
+            } else {
+                sb.append(c);
+                i++;
             }
-            if (cls.length() > 0) cls.append('.');
-            cls.append(part);
         }
-        return cls.length() > 0 ? cls.toString() : null;
+        return sb.toString();
     }
 }

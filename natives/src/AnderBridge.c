@@ -42,7 +42,7 @@ JNIEXPORT void JNICALL Java_AnderBridge_registerNativeMethod(
         goto cleanup;
     }
 
-    if (g_native_count >= (int)MAX_TRAMPOLINES) {
+    if (g_native_count >= (int)MAX_NATIVES) {
         fprintf(stderr, "[AnderBridge] too many native methods!\n");
         goto cleanup;
     }
@@ -53,19 +53,35 @@ JNIEXPORT void JNICALL Java_AnderBridge_registerNativeMethod(
     int param_count = 0;
     const char *p = sig + 1;
     while (*p && *p != ')') {
-        if (*p == 'L') { while (*p && *p != ';') p++; }
-        else if (*p != '[') param_count++;
+        if (*p == '[') {
+            while (*p == '[') p++;
+            if (*p == 'L') { while (*p && *p != ';') p++; }
+            param_count++;
+        } else if (*p == 'L') {
+            while (*p && *p != ';') p++;
+            param_count++;
+        } else {
+            param_count++;
+        }
         if (*p) p++;
     }
 
     int slot = g_native_count++;
     strncpy(g_natives[slot].symbol, symbol, 255);
+    strncpy(g_natives[slot].signature, sig, 255);
     g_natives[slot].param_count = param_count;
+
+    void *fn_ptr = trampoline_create(slot);
+    if (!fn_ptr) {
+        fprintf(stderr, "[AnderBridge] trampoline_create failed for slot %d\n", slot);
+        g_native_count--;
+        goto cleanup;
+    }
 
     JNINativeMethod nm;
     nm.name      = (char *)method_name;
     nm.signature = (char *)sig;
-    nm.fnPtr     = g_trampolines[slot];
+    nm.fnPtr     = fn_ptr;
 
     int ret = (*env)->RegisterNatives(env, target, &nm, 1);
     if (ret != 0) {
@@ -120,18 +136,21 @@ JNIEXPORT jobjectArray JNICALL Java_AnderBridge_listNativeSymbols(JNIEnv *env, j
     }
 
     int count = 0;
-    for (uint32_t i = 0; i < hdr.data_len - 1; i++)
+    for (uint32_t i = 0; i < hdr.data_len; i++)
         if (buf[i] == '\0') count++;
 
     jclass str_cls = (*env)->FindClass(env, "java/lang/String");
     jobjectArray arr = (*env)->NewObjectArray(env, count, str_cls, NULL);
 
     int idx = 0, start = 0;
-    for (uint32_t i = 0; i <= hdr.data_len; i++) {
-        if (buf[i] == '\0' && i > (uint32_t)start) {
-            jstring s = (*env)->NewStringUTF(env, (char *)buf + start);
-            (*env)->SetObjectArrayElement(env, arr, idx++, s);
-            (*env)->DeleteLocalRef(env, s);
+    for (uint32_t i = 0; i < hdr.data_len; i++) {
+        if (buf[i] == '\0') {
+            int slen = i - start;
+            if (slen > 0 && idx < count) {
+                jstring s = (*env)->NewStringUTF(env, (char *)buf + start);
+                (*env)->SetObjectArrayElement(env, arr, idx++, s);
+                (*env)->DeleteLocalRef(env, s);
+            }
             start = i + 1;
         }
     }

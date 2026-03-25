@@ -40,9 +40,6 @@ int recv_msg_dyn(MsgHeader *hdr, uint8_t **buf_out) {
         fflush(stderr);
         return -1;
     }
-    fprintf(stderr, "[AnderBridge] recv_msg: type=0x%02x id=%u dlen=%u\n",
-            hdr->type, hdr->id, hdr->data_len);
-    fflush(stderr);
     if (hdr->data_len == 0) {
         *buf_out = NULL;
         return 0;

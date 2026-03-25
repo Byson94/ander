@@ -60,7 +60,7 @@ pub fn libgdx_run(apk: &Path) -> anyhow::Result<()> {
     let lib_dir = crate::deps::ensure_libgdx_deps(&libgdx_version)?;
     
     // Find main app class
-    let main_class = crate::apk::class::find_main_class(&app_jar)?;
+    let main_class = crate::apk::class::find_main_class(&tmp.path(), &app_jar)?;
     log::info!("Detected main class: {}", main_class);
     
     // Generate source

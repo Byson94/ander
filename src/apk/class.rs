@@ -3,7 +3,11 @@ use std::path::Path;
 use std::io::Read;
 use zip::ZipArchive;
 
-pub fn find_main_class(jar: &Path) -> anyhow::Result<String> {
+pub fn find_main_class(extracted_dir: &Path, jar: &Path) -> anyhow::Result<String> {
+    if let Ok(class) = find_main_class_from_manifest(extracted_dir) {
+        return Ok(class);
+    }
+
     let file = std::fs::File::open(jar)?;
     let mut zip = ZipArchive::new(file)?;
 
@@ -25,6 +29,71 @@ pub fn find_main_class(jar: &Path) -> anyhow::Result<String> {
     }
 
     anyhow::bail!("Could not find main class in {}", jar.display())
+}
+
+fn find_main_class_from_manifest(extracted_dir: &Path) -> anyhow::Result<String> {
+    let bytes = std::fs::read(extracted_dir.join("AndroidManifest.xml"))?;
+    let manifest = axmldecoder::parse(&bytes)?;
+    let root = manifest
+        .get_root()
+        .as_ref()
+        .ok_or_else(|| anyhow::anyhow!("AndroidManifest.xml has no root element"))?;
+
+    let axmldecoder::Node::Element(root_el) = root else {
+        anyhow::bail!("AndroidManifest.xml root is not an element");
+    };
+
+    for node in root_el.get_children() {
+        let axmldecoder::Node::Element(el) = node else { continue };
+        if el.get_tag() != "application" { continue }
+
+        for child in el.get_children() {
+            let axmldecoder::Node::Element(activity) = child else { continue };
+            if activity.get_tag() != "activity" && activity.get_tag() != "activity-alias" {
+                continue;
+            }
+
+            let has_main_launcher = activity.get_children().iter().any(|n| {
+                let axmldecoder::Node::Element(filter) = n else { return false };
+                if filter.get_tag() != "intent-filter" { return false }
+
+                let mut has_main = false;
+                let mut has_launcher = false;
+                for item in filter.get_children() {
+                    let axmldecoder::Node::Element(item_el) = item else { continue };
+                    let name = item_el.get_attributes().get("android:name").map(String::as_str);
+                    match item_el.get_tag() {
+                        "action"   if name == Some("android.intent.action.MAIN")            => has_main = true,
+                        "category" if name == Some("android.intent.category.LAUNCHER")      => has_launcher = true,
+                        _ => {}
+                    }
+                }
+                has_main && has_launcher
+            });
+
+            if has_main_launcher {
+                let raw = activity
+                    .get_attributes()
+                    .get("android:name")
+                    .ok_or_else(|| anyhow::anyhow!("Launcher activity has no android:name"))?
+                    .clone();
+
+                let class_name = if raw.starts_with('.') {
+                    let pkg = root_el
+                        .get_attributes()
+                        .get("package")
+                        .ok_or_else(|| anyhow::anyhow!("No package in manifest"))?;
+                    format!("{}{}", pkg, raw)
+                } else {
+                    raw
+                };
+
+                return Ok(class_name.replace('.', "/"));
+            }
+        }
+    }
+
+    anyhow::bail!("No MAIN/LAUNCHER activity found in AndroidManifest.xml")
 }
 
 fn read_manifest_main_class(zip: &mut ZipArchive<std::fs::File>) -> anyhow::Result<String> {

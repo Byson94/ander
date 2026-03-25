@@ -15,8 +15,8 @@ public class AnderLauncherLwjgl3 {
         int height = Integer.parseInt(args[2]);
         String title = args[3];
 
-        AnderBridge.connect();
-        System.out.println("[ander] AnderBridge connected to bionic launcher");
+        // AnderBridge.connect();
+        // System.out.println("[ander] AnderBridge connected to bionic launcher");
 
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle(title);
