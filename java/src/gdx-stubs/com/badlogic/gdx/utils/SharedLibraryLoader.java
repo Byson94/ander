@@ -54,47 +54,45 @@ public class SharedLibraryLoader {
 
         String body = sym.substring(5);
 
-        // Decode JNI mangling: _00024 -> $, _1 -> _, then split on _ for dots
-        String decoded = decodeJniName(body);
+        int overloadSep = body.indexOf("__");
+        if (overloadSep >= 0) {
+            body = body.substring(0, overloadSep);
+        }
 
-        int lastDot = decoded.lastIndexOf('_');
-        int lastSep = decoded.lastIndexOf('.');
-        if (lastSep < 0) return null;
+        java.util.List<String> parts = splitMangledParts(body);
+        if (parts.size() < 2) return null;
 
-        return decoded.substring(0, lastSep);
+        parts.remove(parts.size() - 1);
+        return String.join(".", parts);
     }
 
-    private String decodeJniName(String mangled) {
-        StringBuilder sb = new StringBuilder();
+    private java.util.List<String> splitMangledParts(String mangled) {
+        java.util.List<String> parts = new java.util.ArrayList<>();
+        StringBuilder current = new StringBuilder();
         int i = 0;
         while (i < mangled.length()) {
             char c = mangled.charAt(i);
             if (c == '_') {
-                if (i + 1 < mangled.length()) {
-                    char next = mangled.charAt(i + 1);
-                    if (next == '1') {
-                        sb.append('_'); i += 2; continue;
-                    } else if (next == '2') {
-                        sb.append(';'); i += 2; continue;
-                    } else if (next == '3') {
-                        sb.append('['); i += 2; continue;
-                    } else if (next == '0' && i + 5 < mangled.length()) {
-                        // _0XXXX unicode escape
-                        String hex = mangled.substring(i + 2, i + 6);
-                        if (hex.matches("[0-9a-fA-F]{4}")) {
-                            sb.append((char) Integer.parseInt(hex, 16));
-                            i += 6; continue;
-                        }
+                char next = i + 1 < mangled.length() ? mangled.charAt(i + 1) : 0;
+                if (next == '1') { current.append('_'); i += 2; continue; }
+                if (next == '2') { current.append(';'); i += 2; continue; }
+                if (next == '3') { current.append('['); i += 2; continue; }
+                if (next == '0' && i + 5 < mangled.length()) {
+                    String hex = mangled.substring(i + 2, i + 6);
+                    if (hex.matches("[0-9a-fA-F]{4}")) {
+                        current.append((char) Integer.parseInt(hex, 16));
+                        i += 6; continue;
                     }
                 }
-                // Plain '_' is a package/class separator -> '.'
-                sb.append('.');
+                parts.add(current.toString());
+                current.setLength(0);
                 i++;
             } else {
-                sb.append(c);
+                current.append(c);
                 i++;
             }
         }
-        return sb.toString();
+        if (current.length() > 0) parts.add(current.toString());
+        return parts;
     }
 }
